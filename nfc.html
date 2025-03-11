@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFC Emergency Call</title>
+    <style>
+        * { text-align: center; font-family: Arial, sans-serif; }
+        button { padding: 10px 20px; font-size: 18px; margin-top: 20px; cursor: pointer; }
+        #output { margin-top: 20px; font-size: 20px; }
+    </style>
+</head>
+<body>
+    <h1>🚒 불이 났을 때, 누구를 출동시킬 지 스마트폰을 태그해주세요! 📡</h1>
+    <button id="scan-btn">📡 NFC 스캔 시작</button>
+    <p id="output">NFC 태그 정보를 여기에 표시합니다.</p>
+
+    <script>
+        document.getElementById("scan-btn").addEventListener("click", async () => {
+            if ("NDEFReader" in window) {
+                try {
+                    const nfcReader = new NDEFReader();
+                    await nfcReader.scan();
+                    nfcReader.onreading = event => {
+                        const decoder = new TextDecoder();
+                        for (const record of event.message.records) {
+                            let tagData = decoder.decode(record.data).toLowerCase();
+                            document.getElementById("output").textContent = `📡 NFC 태그: ${tagData}`;
+                            
+                            // 🚨 출동할 구조대원 선택 후 이동
+                            if (tagData === "roi") {
+                                window.location.href = "roi.html";
+                            } else if (tagData === "helly") {
+                                window.location.href = "helly.html";
+                            } else if (tagData === "poli") {
+                                window.location.href = "poli.html";
+                            } else if (tagData === "amber") {
+                                window.location.href = "amber.html";
+                            } else {
+                                document.getElementById("output").textContent = "❌ 알 수 없는 태그입니다.";
+                            }
+                        }
+                    };
+                } catch (error) {
+                    document.getElementById("output").textContent = `⚠️ NFC 읽기 실패: ${error.message}`;
+                }
+            } else {
+                document.getElementById("output").textContent = "❌ 이 브라우저는 NFC를 지원하지 않습니다.";
+            }
+        });
+    </script>
+</body>
+</html>
