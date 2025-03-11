@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Emergency</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: black; }
+        video { width: 100%; height: 100vh; object-fit: contain; }
+    </style>
+</head>
+<body>
+    <video id="fireVideo" autoplay playsinline>
+        <source src="fire.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <script>
+        document.getElementById("fireVideo").addEventListener("ended", function() {
+            window.location.href = "nfc.html"; // 🔥 영상 종료 후 NFC 태깅 페이지로 이동
+        });
+    </script>
+</body>
+</html>
